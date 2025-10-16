@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { SnipcartSetup } from "@lloydjatkinson/astro-snipcart/astro";
 ---
 
 <!doctype html>
@@ -14,6 +15,7 @@ import "../styles/global.css";
             name="description"
             content="Discover the ultimate collection of Star Wars toys, collectibles, and memorabilia. From lightsabers to starships, find your destiny here."
         />
+        <SnipcartSetup />
     </head>
     <body>
         <slot />
