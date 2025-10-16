@@ -1,6 +1,6 @@
 ---
 import type { Product } from "../data/products";
-import { Product as SnipcartProduct } from '@lloydjatkinson/astro-snipcart/astro';
+import { Product as SnipcartProduct } from "@lloydjatkinson/astro-snipcart/astro";
 
 interface Props {
     product: Product;
@@ -16,8 +16,9 @@ const discountPercentage = product.originalPrice
     : null;
 ---
 
-<div
-    class="group relative bg-card border border-border rounded-lg overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10"
+<a
+    href={`/product/${product.id}`}
+    class="group relative bg-card border border-border rounded-lg overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 block"
 >
     <!-- Sale Badge -->
     {
@@ -104,17 +105,43 @@ const discountPercentage = product.originalPrice
         </div>
 
         <!-- Add to Cart Button -->
-        {product.inStock ? (
-            <SnipcartProduct
-                id={product.id}
-                name={product.name}
-                url={`/product/${product.id}`}
-                price={product.price}
-                description={product.description}
-                image={product.image}
-                class="w-full"
-            >
-                <button class="w-full py-2 px-4 rounded-md font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90">
+        {
+            product.inStock ? (
+                <SnipcartProduct
+                    id={product.id}
+                    name={product.name}
+                    url={`/product/${product.id}`}
+                    price={product.price}
+                    description={product.description}
+                    image={product.image}
+                >
+                    <button
+                        class="w-full py-2 px-4 rounded-md font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90"
+                        onclick="event.stopPropagation()"
+                    >
+                        <div class="flex items-center justify-center gap-2">
+                            <svg
+                                class="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"
+                                />
+                            </svg>
+                            Add to Cart
+                        </div>
+                    </button>
+                </SnipcartProduct>
+            ) : (
+                <button
+                    class="w-full py-2 px-4 rounded-md font-medium transition-colors bg-secondary text-secondary-foreground cursor-not-allowed"
+                    onclick="event.stopPropagation()"
+                >
                     <div class="flex items-center justify-center gap-2">
                         <svg
                             class="w-4 h-4"
@@ -127,31 +154,12 @@ const discountPercentage = product.originalPrice
                                 stroke-linejoin="round"
                                 stroke-width="2"
                                 d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"
-                            ></path>
+                            />
                         </svg>
-                        Add to Cart
+                        Out of Stock
                     </div>
                 </button>
-            </SnipcartProduct>
-        ) : (
-            <button class="w-full py-2 px-4 rounded-md font-medium transition-colors bg-secondary text-secondary-foreground cursor-not-allowed">
-                <div class="flex items-center justify-center gap-2">
-                    <svg
-                        class="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"
-                        ></path>
-                    </svg>
-                    Out of Stock
-                </div>
-            </button>
-        )}
+            )
+        }
     </div>
-</div>
+</a>
