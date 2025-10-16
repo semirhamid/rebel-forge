@@ -16,9 +16,8 @@ const discountPercentage = product.originalPrice
     : null;
 ---
 
-<a
-    href={`/product/${product.id}`}
-    class="group relative bg-card border border-border rounded-lg overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 block"
+<div
+    class="group relative bg-card border border-border rounded-lg overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10"
 >
     <!-- Sale Badge -->
     {
@@ -38,73 +37,78 @@ const discountPercentage = product.originalPrice
         )
     }
 
-    <!-- Product Image -->
-    <div class="relative aspect-square overflow-hidden">
-        <img
-            src={product.image}
-            alt={product.name}
-            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
-        <div
-            class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        >
-        </div>
-    </div>
-
-    <!-- Product Info -->
-    <div class="p-4 space-y-3">
-        <div>
-            <span
-                class="text-xs text-muted-foreground border border-border px-2 py-1 rounded mb-2 inline-block"
+    <!-- Clickable Product Area -->
+    <a href={`/product/${product.id}`} class="block">
+        <!-- Product Image -->
+        <div class="relative aspect-square overflow-hidden">
+            <img
+                src={product.image}
+                alt={product.name}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+            <div
+                class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
             >
-                {product.category}
-            </span>
-            <h3
-                class="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2"
-            >
-                {product.name}
-            </h3>
+            </div>
         </div>
 
-        <!-- Rating -->
-        <div class="flex items-center gap-1">
-            <div class="flex">
+        <!-- Product Info -->
+        <div class="p-4 space-y-3">
+            <div>
+                <span
+                    class="text-xs text-muted-foreground border border-border px-2 py-1 rounded mb-2 inline-block"
+                >
+                    {product.category}
+                </span>
+                <h3
+                    class="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2"
+                >
+                    {product.name}
+                </h3>
+            </div>
+
+            <!-- Rating -->
+            <div class="flex items-center gap-1">
+                <div class="flex">
+                    {
+                        Array.from({ length: 5 }, (_, i) => (
+                            <svg
+                                class={`w-4 h-4 ${
+                                    i < Math.floor(product.rating)
+                                        ? "fill-sw-yellow text-sw-yellow"
+                                        : "text-muted-foreground"
+                                }`}
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                            >
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                        ))
+                    }
+                </div>
+                <span class="text-sm text-muted-foreground">
+                    {product.rating} ({product.reviews})
+                </span>
+            </div>
+
+            <!-- Price -->
+            <div class="flex items-center gap-2">
+                <span class="text-xl font-bold text-primary">
+                    ${product.price}
+                </span>
                 {
-                    Array.from({ length: 5 }, (_, i) => (
-                        <svg
-                            class={`w-4 h-4 ${
-                                i < Math.floor(product.rating)
-                                    ? "fill-sw-yellow text-sw-yellow"
-                                    : "text-muted-foreground"
-                            }`}
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                        >
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                    ))
+                    product.originalPrice && (
+                        <span class="text-sm text-muted-foreground line-through">
+                            ${product.originalPrice}
+                        </span>
+                    )
                 }
             </div>
-            <span class="text-sm text-muted-foreground">
-                {product.rating} ({product.reviews})
-            </span>
         </div>
+    </a>
 
-        <!-- Price -->
-        <div class="flex items-center gap-2">
-            <span class="text-xl font-bold text-primary">
-                ${product.price}
-            </span>
-            {
-                product.originalPrice && (
-                    <span class="text-sm text-muted-foreground line-through">
-                        ${product.originalPrice}
-                    </span>
-                )
-            }
-        </div>
-
-        <!-- Add to Cart Button -->
+    <!-- Add to Cart Button - Outside clickable area -->
+    <div class="px-4 pb-4">
         {
             product.inStock ? (
                 <SnipcartProduct
@@ -115,10 +119,7 @@ const discountPercentage = product.originalPrice
                     description={product.description}
                     image={product.image}
                 >
-                    <button
-                        class="w-full py-2 px-4 rounded-md font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90"
-                        onclick="event.stopPropagation()"
-                    >
+                    <button class="w-full py-2 px-4 rounded-md font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90">
                         <div class="flex items-center justify-center gap-2">
                             <svg
                                 class="w-4 h-4"
@@ -138,10 +139,7 @@ const discountPercentage = product.originalPrice
                     </button>
                 </SnipcartProduct>
             ) : (
-                <button
-                    class="w-full py-2 px-4 rounded-md font-medium transition-colors bg-secondary text-secondary-foreground cursor-not-allowed"
-                    onclick="event.stopPropagation()"
-                >
+                <button class="w-full py-2 px-4 rounded-md font-medium transition-colors bg-secondary text-secondary-foreground cursor-not-allowed">
                     <div class="flex items-center justify-center gap-2">
                         <svg
                             class="w-4 h-4"
@@ -162,4 +160,4 @@ const discountPercentage = product.originalPrice
             )
         }
     </div>
-</a>
+</div>
