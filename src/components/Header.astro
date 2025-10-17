@@ -37,9 +37,17 @@ import {
                     </svg>
                     <input
                         type="text"
+                        id="header-search"
                         placeholder="Search for Star Wars toys..."
                         class="w-full pl-10 pr-4 py-2 bg-muted/50 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
                     />
+                    <!-- Search Results Dropdown -->
+                    <div
+                        id="search-results"
+                        class="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-md shadow-lg z-50 hidden max-h-96 overflow-y-auto"
+                    >
+                        <!-- Results will be populated here -->
+                    </div>
                 </div>
             </div>
 
@@ -111,3 +119,241 @@ import {
         </div>
     </div>
 </header>
+
+<script>
+    // Products data - in a real app, this would come from an API
+    const products = [
+        {
+            id: "1",
+            name: "Lightsaber - Luke Skywalker",
+            price: 149.99,
+            originalPrice: 199.99,
+            image: "https://placehold.co/400x400/1a1a1a/FFE81F?text=Lightsaber",
+            category: "Lightsabers",
+            rating: 4.8,
+            reviews: 234,
+            inStock: true,
+            description:
+                "Authentic replica of Luke Skywalker's lightsaber with sound effects and LED lighting.",
+        },
+        {
+            id: "2",
+            name: "Darth Vader Helmet",
+            price: 89.99,
+            image: "https://placehold.co/400x400/1a1a1a/FFE81F?text=Vader+Helmet",
+            category: "Collectibles",
+            rating: 4.9,
+            reviews: 156,
+            inStock: true,
+            description:
+                "Premium Darth Vader helmet with voice changer and breathing sound effects.",
+        },
+        {
+            id: "3",
+            name: "Millennium Falcon Model",
+            price: 299.99,
+            originalPrice: 349.99,
+            image: "https://placehold.co/400x400/1a1a1a/FFE81F?text=Millennium+Falcon",
+            category: "Starships",
+            rating: 4.7,
+            reviews: 89,
+            inStock: true,
+            description:
+                "Detailed 1:144 scale Millennium Falcon with authentic movie details.",
+        },
+        {
+            id: "4",
+            name: "Baby Yoda Plush",
+            price: 34.99,
+            image: "https://placehold.co/400x400/1a1a1a/FFE81F?text=Baby+Yoda",
+            category: "Plush Toys",
+            rating: 4.9,
+            reviews: 412,
+            inStock: true,
+            description:
+                "Adorable Baby Yoda plush toy, soft and cuddly with authentic details.",
+        },
+        {
+            id: "5",
+            name: "Stormtrooper Action Figure",
+            price: 24.99,
+            image: "https://placehold.co/400x400/1a1a1a/FFE81F?text=Stormtrooper",
+            category: "Action Figures",
+            rating: 4.6,
+            reviews: 78,
+            inStock: false,
+            description:
+                "Highly detailed 6-inch Stormtrooper figure with multiple points of articulation.",
+        },
+        {
+            id: "6",
+            name: "Death Star Building Set",
+            price: 459.99,
+            originalPrice: 499.99,
+            image: "https://placehold.co/400x400/1a1a1a/FFE81F?text=Death+Star",
+            category: "Building Sets",
+            rating: 4.8,
+            reviews: 145,
+            inStock: true,
+            description:
+                "Ultimate Death Star building set with 4,016 pieces and 23 minifigures.",
+        },
+        {
+            id: "7",
+            name: "R2-D2 Interactive Droid",
+            price: 199.99,
+            image: "https://placehold.co/400x400/1a1a1a/FFE81F?text=R2-D2",
+            category: "Droids",
+            rating: 4.7,
+            reviews: 203,
+            inStock: true,
+            description:
+                "App-controlled R2-D2 with authentic sounds, lights, and movements.",
+        },
+        {
+            id: "8",
+            name: "Jedi Training Remote",
+            price: 59.99,
+            image: "https://placehold.co/400x400/1a1a1a/FFE81F?text=Jedi+Remote",
+            category: "Training",
+            rating: 4.5,
+            reviews: 67,
+            inStock: true,
+            description:
+                "Interactive Jedi training remote with motion sensors and sound effects.",
+        },
+    ];
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById(
+            "header-search"
+        ) as HTMLInputElement | null;
+        const searchResults = document.getElementById(
+            "search-results"
+        ) as HTMLElement | null;
+        let searchTimeout: NodeJS.Timeout | null = null;
+
+        if (searchInput && searchResults) {
+            // Debounced search function
+            function performSearch(query: string) {
+                if (query.length < 2) {
+                    searchResults?.classList.add("hidden");
+                    return;
+                }
+
+                const filteredProducts = products.filter(
+                    (product: any) =>
+                        product.name
+                            .toLowerCase()
+                            .includes(query.toLowerCase()) ||
+                        product.description
+                            .toLowerCase()
+                            .includes(query.toLowerCase()) ||
+                        product.category
+                            .toLowerCase()
+                            .includes(query.toLowerCase())
+                );
+
+                displayResults(filteredProducts);
+            }
+
+            // Display search results
+            function displayResults(products: any[]) {
+                if (!searchResults) return;
+
+                if (products.length === 0) {
+                    searchResults.innerHTML = `
+                        <div class="p-4 text-center text-muted-foreground">
+                            <p>No products found</p>
+                        </div>
+                    `;
+                } else {
+                    searchResults.innerHTML =
+                        products
+                            .slice(0, 5)
+                            .map(
+                                (product: any) => `
+                        <a href="/product/${product.id}" class="block p-3 hover:bg-muted transition-colors border-b border-border last:border-b-0">
+                            <div class="flex items-center gap-3">
+                                <img src="${product.image}" alt="${product.name}" class="w-12 h-12 object-cover rounded">
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="font-medium text-sm truncate">${product.name}</h4>
+                                    <p class="text-xs text-muted-foreground">${product.category}</p>
+                                    <p class="text-sm font-semibold text-primary">$${product.price}</p>
+                                </div>
+                            </div>
+                        </a>
+                    `
+                            )
+                            .join("") +
+                        `
+                        <div class="p-3 border-t border-border">
+                            <a href="/search?q=${encodeURIComponent(searchInput?.value || "")}" class="block text-center text-sm text-primary hover:text-primary/80">
+                                View all results
+                            </a>
+                        </div>
+                    `;
+                }
+                searchResults.classList.remove("hidden");
+            }
+
+            // Input event with debounce
+            searchInput.addEventListener("input", function (e: Event) {
+                const target = e.target as HTMLInputElement;
+                if (searchTimeout) {
+                    clearTimeout(searchTimeout);
+                }
+                searchTimeout = setTimeout(() => {
+                    performSearch(target.value);
+                }, 300); // 300ms debounce
+            });
+
+            // Prevent form submission on Enter key
+            searchInput.addEventListener(
+                "keydown",
+                function (e: KeyboardEvent) {
+                    if (e.key === "Enter") {
+                        e.preventDefault();
+                        const target = e.target as HTMLInputElement;
+                        const query = target.value;
+                        if (query.length >= 2) {
+                            window.location.href = `/search?q=${encodeURIComponent(query)}`;
+                        }
+                    }
+                }
+            );
+
+            // Hide results when clicking outside
+            document.addEventListener("click", function (e: MouseEvent) {
+                const target = e.target as Node;
+                if (
+                    !searchInput.contains(target) &&
+                    !searchResults.contains(target)
+                ) {
+                    searchResults.classList.add("hidden");
+                }
+            });
+
+            // Show results when focusing on input
+            searchInput.addEventListener("focus", function () {
+                if (searchInput.value.length >= 2) {
+                    performSearch(searchInput.value);
+                }
+            });
+
+            // Handle clicks on search result links
+            searchResults.addEventListener("click", function (e: MouseEvent) {
+                const target = e.target as Element;
+                const link = target.closest("a");
+                if (link) {
+                    // Let the link work normally
+                    e.stopPropagation();
+                    // Hide the dropdown after a short delay to allow navigation
+                    setTimeout(() => {
+                        searchResults.classList.add("hidden");
+                    }, 100);
+                }
+            });
+        }
+    });
+</script>
