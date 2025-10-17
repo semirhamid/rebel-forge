@@ -33,16 +33,18 @@ const featuredProducts = products.slice(0, 6);
                     starships, find your destiny here.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <button
+                    <a
+                        href="/search"
                         class="bg-primary text-primary-foreground px-8 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
                     >
                         Shop Now
-                    </button>
-                    <button
+                    </a>
+                    <a
+                        href="/search"
                         class="border border-border text-foreground px-8 py-3 rounded-lg font-medium hover:bg-muted transition-colors"
                     >
                         View Catalog
-                    </button>
+                    </a>
                 </div>
             </div>
         </section>
@@ -71,11 +73,12 @@ const featuredProducts = products.slice(0, 6);
                 </div>
 
                 <div class="text-center">
-                    <button
+                    <a
+                        href="/search"
                         class="border border-border text-foreground px-8 py-3 rounded-lg font-medium hover:bg-muted transition-colors"
                     >
                         View All Products
-                    </button>
+                    </a>
                 </div>
             </div>
         </section>
@@ -237,18 +240,25 @@ const featuredProducts = products.slice(0, 6);
                     Subscribe to get exclusive deals, new product announcements,
                     and galactic updates
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                <form
+                    class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto"
+                    action="/api/newsletter"
+                    method="POST"
+                >
                     <input
                         type="email"
+                        name="email"
                         placeholder="Enter your email"
                         class="flex-1 px-4 py-2 rounded-lg bg-muted border border-border focus:outline-none focus:ring-2 focus:ring-primary"
+                        required
                     />
                     <button
+                        type="submit"
                         class="bg-primary text-primary-foreground px-6 py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors"
                     >
                         Subscribe
                     </button>
-                </div>
+                </form>
             </div>
         </section>
 
@@ -265,17 +275,24 @@ const featuredProducts = products.slice(0, 6);
                 <div
                     class="flex justify-center gap-6 text-sm text-muted-foreground"
                 >
-                    <a href="#" class="hover:text-primary transition-colors"
+                    <a
+                        href="/privacy"
+                        class="hover:text-primary transition-colors"
                         >Privacy Policy</a
                     >
-                    <a href="#" class="hover:text-primary transition-colors"
+                    <a
+                        href="/terms"
+                        class="hover:text-primary transition-colors"
                         >Terms of Service</a
                     >
-                    <a href="#" class="hover:text-primary transition-colors"
+                    <a
+                        href="/contact"
+                        class="hover:text-primary transition-colors"
                         >Contact Us</a
                     >
-                    <a href="#" class="hover:text-primary transition-colors"
-                        >About</a
+                    <a
+                        href="/about"
+                        class="hover:text-primary transition-colors">About</a
                     >
                 </div>
                 <p class="text-xs text-muted-foreground mt-6">

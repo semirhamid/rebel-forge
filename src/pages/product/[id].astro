@@ -101,6 +101,100 @@ const { product } = Astro.props;
                             </p>
                         </div>
 
+                        <!-- Product Story & Lore -->
+                        <div
+                            class="bg-card border border-border rounded-lg p-6"
+                        >
+                            <h3 class="text-lg font-semibold mb-4 text-primary">
+                                The Story Behind This Artifact
+                            </h3>
+                            <div class="space-y-4 text-muted-foreground">
+                                <div>
+                                    {
+                                        product.story.paragraphs.map(
+                                            (paragraph) => (
+                                                <p class="mb-3">{paragraph}</p>
+                                            )
+                                        )
+                                    }
+                                    <p>
+                                        <em>
+                                            "{product.story.quote}"
+                                        </em>{" "}
+                                        - {product.story.quoteAuthor}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Specifications -->
+                        <div
+                            class="bg-card border border-border rounded-lg p-6"
+                        >
+                            <h3 class="text-lg font-semibold mb-4 text-primary">
+                                Technical Specifications
+                            </h3>
+                            <div
+                                class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm"
+                            >
+                                <div class="space-y-2">
+                                    <div class="flex justify-between">
+                                        <span class="text-muted-foreground"
+                                            >Material:</span
+                                        >
+                                        <span class="text-foreground">
+                                            {product.specifications.material}
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-muted-foreground"
+                                            >Power Source:</span
+                                        >
+                                        <span class="text-foreground">
+                                            {product.specifications.powerSource}
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-muted-foreground"
+                                            >Dimensions:</span
+                                        >
+                                        <span class="text-foreground">
+                                            {product.specifications.dimensions}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between">
+                                        <span class="text-muted-foreground"
+                                            >Origin:</span
+                                        >
+                                        <span class="text-foreground">
+                                            {product.specifications.origin}
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-muted-foreground"
+                                            >Era:</span
+                                        >
+                                        <span class="text-foreground">
+                                            {product.specifications.era}
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-muted-foreground"
+                                            >Force Alignment:</span
+                                        >
+                                        <span class="text-foreground">
+                                            {
+                                                product.specifications
+                                                    .forceAlignment
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Add to Cart -->
                         <div class="pt-4">
                             {
@@ -205,6 +299,77 @@ const { product } = Astro.props;
                                 )
                             }
                         </div>
+                    </div>
+                </div>
+
+                <!-- Related Products -->
+                <div class="mt-16">
+                    <h2
+                        class="text-2xl font-bold font-orbitron mb-8 text-center"
+                    >
+                        Continue Your Galactic Journey
+                    </h2>
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                    >
+                        {
+                            products
+                                .filter((p) => p.id !== product.id)
+                                .slice(0, 3)
+                                .map((relatedProduct) => (
+                                    <div class="bg-card border border-border rounded-lg overflow-hidden hover:border-primary/50 transition-colors">
+                                        <div class="aspect-square overflow-hidden">
+                                            <img
+                                                src={relatedProduct.image}
+                                                alt={relatedProduct.name}
+                                                class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                                            />
+                                        </div>
+                                        <div class="p-4">
+                                            <div class="flex items-center justify-between mb-2">
+                                                <span class="text-xs text-muted-foreground border border-border px-2 py-1 rounded">
+                                                    {relatedProduct.category}
+                                                </span>
+                                                <div class="flex items-center gap-1">
+                                                    <svg
+                                                        class="w-4 h-4 fill-sw-yellow text-sw-yellow"
+                                                        viewBox="0 0 20 20"
+                                                    >
+                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                    </svg>
+                                                    <span class="text-sm text-muted-foreground">
+                                                        {relatedProduct.rating}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <h3 class="font-semibold mb-2 line-clamp-2">
+                                                {relatedProduct.name}
+                                            </h3>
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center gap-2">
+                                                    <span class="text-lg font-bold text-primary">
+                                                        ${relatedProduct.price}
+                                                    </span>
+                                                    {relatedProduct.originalPrice && (
+                                                        <span class="text-sm text-muted-foreground line-through">
+                                                            $
+                                                            {
+                                                                relatedProduct.originalPrice
+                                                            }
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <a
+                                                    href={`/product/${relatedProduct.id}`}
+                                                    class="text-primary hover:text-primary/80 transition-colors text-sm font-medium"
+                                                >
+                                                    View Details →
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                        }
                     </div>
                 </div>
             </div>

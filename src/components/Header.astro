@@ -38,13 +38,19 @@ import {
                     <input
                         type="text"
                         id="header-search"
+                        name="search"
                         placeholder="Search for Star Wars toys..."
                         class="w-full pl-10 pr-4 py-2 bg-muted/50 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+                        aria-label="Search products"
+                        autocomplete="off"
                     />
                     <!-- Search Results Dropdown -->
                     <div
                         id="search-results"
                         class="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-md shadow-lg z-50 hidden max-h-96 overflow-y-auto"
+                        role="listbox"
+                        aria-label="Search results"
+                        aria-expanded="false"
                     >
                         <!-- Results will be populated here -->
                     </div>
@@ -54,7 +60,8 @@ import {
             <!-- Right Side Actions -->
             <div class="flex items-center gap-2">
                 <!-- Search Button - Mobile Only -->
-                <button
+                <a
+                    href="/search"
                     class="md:hidden p-2 hover:bg-muted rounded-md transition-colors"
                 >
                     <svg
@@ -70,7 +77,7 @@ import {
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                         ></path>
                     </svg>
-                </button>
+                </a>
 
                 <!-- Shopping Cart -->
                 <CartCheckout>
@@ -101,12 +108,14 @@ import {
                 <!-- Mobile Menu -->
                 <button
                     class="md:hidden p-2 hover:bg-muted rounded-md transition-colors"
+                    aria-label="Open mobile menu"
                 >
                     <svg
                         class="w-5 h-5"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
+                        aria-hidden="true"
                     >
                         <path
                             stroke-linecap="round"
